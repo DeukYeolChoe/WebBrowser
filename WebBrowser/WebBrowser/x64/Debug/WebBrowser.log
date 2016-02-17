@@ -1,0 +1,16 @@
+﻿  parser.cpp
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(17): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(23): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(42): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(45): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(66): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(87): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(88): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(91): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(174): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(176): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(181): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(183): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(187): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\deukyeolchoe\desktop\(2016.02.16)webbrowser\webbrowser\webbrowser\parser.cpp(189): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  WebBrowser.vcxproj -> C:\Users\DEUKYEOLCHOE\Desktop\(2016.02.16)WebBrowser\WebBrowser\x64\Debug\WebBrowser.exe
