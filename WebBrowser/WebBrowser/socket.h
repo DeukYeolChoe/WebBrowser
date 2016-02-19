@@ -27,12 +27,12 @@ class Socket
 	public:	
 		string ipAddrs;
 		string port;
-		vector<string> v_htmlBuf;
+		vector<wstring> v_htmlBuf;
 		char g_imgBuf[BUFSIZE];
-		ImgInfo imgInfo;
+		ImgAttr imgInfo;
 
 		Socket();
-		int ClientToServer(char* url, HWND hWnd, string method, string para, bool flag);
+		int ClientToServer(wchar_t* url, HWND hWnd, string method, string para, bool flag);
 		int getRemoteHostInfo(hostent *remoteHost, string ipAddrs);
 		bool isFileExist(string fileName);
 		string createHTTPHeader(string method, string file, string param);

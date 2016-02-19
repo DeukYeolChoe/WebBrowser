@@ -29,7 +29,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="tree.cpp" />
     <ClCompile Include="imager.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="socket.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="validate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tree.h" />
     <ClInclude Include="imager.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="socket.h" />

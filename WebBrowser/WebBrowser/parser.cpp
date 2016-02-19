@@ -4,9 +4,9 @@ Parser::Parser()
 {
 }
 
-string Parser::getIPaddrsFromURL(char* url)
+string Parser::getIPaddrsFromURL(string url)
 {
-	string ipAddrs(url);
+	string ipAddrs = url;
 
 	int foundS = 0;
 	int foundE = 0;
@@ -29,9 +29,9 @@ string Parser::getIPaddrsFromURL(char* url)
 	return ipAddrs;
 }
 
-string Parser::getPortFromURL(char* url)
+string Parser::getPortFromURL(string url)
 {
-	string port(url);
+	string port = url;
 
 	int foundS = 0;
 	int foundE = 0;
@@ -53,9 +53,9 @@ string Parser::getPortFromURL(char* url)
 	return port;
 }
 
-string Parser::getPathFromURL(char* url)
+string Parser::getPathFromURL(string url)
 {
-	string path(url);
+	string path = url;
 
 	int foundS = 0;
 	int foundE = 0;
@@ -70,25 +70,25 @@ string Parser::getPathFromURL(char* url)
 	}
 	else
 	{
-		path = "";
+		path = "/";
 	}	
 
 	return path;
 }
 
-string Parser::getHTMLTag(string content)
+wstring Parser::getHTMLTag(wstring content)
 {
 
-	string tag = content;
+	wstring tag = content;
 	int foundS = 0;
 	int foundE = 0;
 	int offset = 0;
 
-	if ((foundS = tag.find("<")) < 0) return "";
-	if ((foundE = tag.find(">")) < 0) return "";
+	if ((foundS = tag.find(L"<")) < 0) return L"";
+	if ((foundE = tag.find(L">")) < 0) return L"";
 	tag = tag.substr(foundS + 1, foundE - (foundS + 1));
 
-	if ((offset = tag.find(" ")) >= 0)
+	if ((offset = tag.find(L" ")) >= 0)
 	{
 		tag = tag.substr(0, offset);
 	}
@@ -96,23 +96,23 @@ string Parser::getHTMLTag(string content)
 	return tag;
 }
 
-string Parser::removeHTMLTag(string content)
+wstring Parser::removeHTMLTag(wstring content)
 {
+	wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 	char plainText[BUFSIZE];
 	int n = 0;
 	int i = 0;
 	bool isSaved = false;
 	char temp[2];
 
-	//plainText = (char *)malloc(sizeof(char *) * strlen(content));
 	memset(&plainText, '\0', sizeof(plainText));
 	
 	while (content.length() > n)
 	{
-		if (content[n] == '<')
+		if (content[n] == L'<')
 			isSaved = false;
 			
-		if (content[n] == '>' && content.length() > (n+1))
+		if (content[n] == L'>' && content.length() > (n+1))
 		{
 			isSaved = true;
 			n++;
@@ -127,153 +127,171 @@ string Parser::removeHTMLTag(string content)
 		n++;
 	}
 	
-	return string(plainText);
+	return converter.from_bytes(plainText);
 }
 
-ImgInfo Parser::getImgInfo(string content)
+ImgAttr Parser::getImgInfo(wstring content)
 {
-	ImgInfo img;
+	ImgAttr img;
 	content.erase(remove(content.begin(), content.end(), '\t'), content.end());
-	string contentInfo = content;
+	wstring contentInfo = content;
 	
-	const regex re(R"(<img[^>]*src=['|\"](.*?)['|\"].*?>)", regex::icase);
+	const wregex re(L"(<img[^>]*src=['|\"](.*?)['|\"].*?>)", regex::icase);
 
-	smatch results;
-	if (regex_match(contentInfo, results, re))
+	wsmatch results;
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, re))
 	{
-		img.src = results[1];
-		cout << "img.src = " << img.src << endl;
+		img.src = results[2];
+		wcout << "img.src = " << img.src << endl;
 	}
 
-	const regex rew(R"(<img[^>]*width=['|\"](.*?)['|\"].*?>)", regex::icase);
-	if (regex_match(contentInfo, results, rew))
+	const wregex rew(L"(<img[^>]*width=['|\"](.*?)['|\"].*?>)", regex::icase);
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, rew))
 	{
-		img.width = results[1];
-		cout << "img.width = " << img.width << endl;
+		img.width = results[2];
+		wcout << "img.width = " << img.width << endl;
 	}
 
-	const regex reh(R"(<img[^>]*height=['|\"](.*?)['|\"].*?>)", regex::icase);
-	if (regex_match(contentInfo, results, reh))
+	const wregex reh(L"(<img[^>]*height=['|\"](.*?)['|\"].*?>)", regex::icase);
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, reh))
 	{
-		img.height = results[1];
-		cout << "img.height = " << img.height << endl;
+		img.height = results[2];
+		wcout << "img.height = " << img.height << endl;
 	}
-
 	return img;
 }
 
-HtmlInfo Parser::getHttpHeadBody(string content)
+wstring Parser::getFormAction(wstring content)
 {
-	int foundS = 0;
-	int foundE = 0;
-	string temp = content;
-
-	if (content == "")
-		return htmlInfo;
-	
-	if ((foundS = content.find("HTTP/1.")) >= 0)
-	{
-		foundE = content.find("\n");
-		htmlInfo.status = content.substr(0, foundE);
-	}
-
-	std::transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
-	if ((foundS = temp.find("<head>")) > 0)
-	{
-		foundE = temp.find("</head>");
-		htmlInfo.head.append(content.substr(foundS + 6, foundE - (foundS + 6)));
-	}
-
-	if ((foundS = temp.find("<body>")) > 0)
-	{
-		foundE = temp.find("</body>");
-		htmlInfo.body.append(content.substr(foundS + 6, foundE - (foundS + 6)));
-	}
-
-	return htmlInfo;
-}
-
-string Parser::getFormAction(string content)
-{
-	string action = "";
+	wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	wstring action = L"";
 	content.erase(remove(content.begin(), content.end(), '\t'), content.end());
-	string contentInfo = content;
+	wstring contentInfo = content;
 
-	const regex re(R"(<form[^>]*action=['|\"](.*?)['|\"].*?>)", regex::icase);
+	const wregex re(L"(<form[^>]*action=['|\"](.*?)['|\"].*?>)", regex::icase);
 
-	smatch results;
-	if (regex_match(contentInfo, results, re))
+	wsmatch results;
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, re))
 	{
 		action = results[1];
-		cout << "Action = " << action << endl;
+		wcout << "Action = " << action << endl;
 	}
 	return action;
 }
 
-string Parser::getFormMethod(string content)
+wstring Parser::getFormMethod(wstring content)
 {
-	string method = "";
+	wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	wstring method = L"";
 	content.erase(remove(content.begin(), content.end(), '\t'), content.end());
-	string contentInfo = content;
+	wstring contentInfo = content;
 
-	const regex re(R"(<form[^>]*method=['|\"](.*?)['|\"].*?>)", regex::icase);
+	const wregex re(L"(<form[^>]*method=['|\"](.*?)['|\"].*?>)", regex::icase);
 
-	smatch results;
-	if (regex_match(contentInfo, results, re))
+	wsmatch results;
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, re))
 	{
 		method = results[1];
-		cout << "Method = " << method << endl;
+		wcout << "Method = " << method << endl;
 	}
 	return method;
 }
 
-string Parser::getInputType(string content)
+wstring Parser::getInputType(wstring content)
 {
-	string type = "";
+	wstring type = L"";
 	content.erase(remove(content.begin(), content.end(), '\t'), content.end());
-	string contentInfo = content;
+	wstring contentInfo = content;
 
-	const regex re(R"(<input[^>]*type=['|\"](.*?)['|\"].*?>)", regex::icase);
+	const wregex re(L"(<input[^>]*type=['|\"](.*?)['|\"].*?>)", regex::icase);
 
-	smatch results;
-	if (regex_match(contentInfo, results, re))
+	wsmatch results;
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, re))
 	{
 		type = results[1];
-		cout << "Method = " << type << endl;
+		wcout << "Method = " << type << endl;
 	}
 	return type;
 }
 
-string Parser::getInputValue(string content)
+wstring Parser::getInputValue(wstring content)
 {
-	string value = "";
+	wstring value = L"";
 	content.erase(remove(content.begin(), content.end(), '\t'), content.end());
-	string contentInfo = content;
+	wstring contentInfo = content;
 
-	const regex re(R"(<input[^>]*value=['|\"](.*?)['|\"].*?>)", regex::icase);
+	const wregex re(L"(<input[^>]*value=['|\"](.*?)['|\"].*?>)", regex::icase);
 
-	smatch results;
-	if (regex_match(contentInfo, results, re))
+	wsmatch results;
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, re))
 	{
 		value = results[1];
-		cout << "Value = " << value << endl;
+		wcout << "Value = " << value << endl;
 	}
 	return value;
 }
 
-string Parser::getInputName(string content)
+wstring Parser::getInputName(wstring content)
 {
-	string name = "";
+	wstring name = L"";
 	content.erase(remove(content.begin(), content.end(), '\t'), content.end());
-	string contentInfo = content;
+	wstring contentInfo = content;
 
-	const regex re(R"(<input[^>]*name=['|\"](.*?)['|\"].*?>)", regex::icase);
+	const wregex re(L"(<input[^>]*name=['|\"](.*?)['|\"].*?>)", regex::icase);
 
-	smatch results;
-	if (regex_match(contentInfo, results, re))
+	wsmatch results;
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, re))
 	{
 		name = results[1];
-		cout << "Name = " << name << endl;
+		wcout << "Name = " << name << endl;
 	}
 	return name;
+}
+
+wstring Parser::getSpanstyle(wstring content)
+{
+	wstring style = L"";
+	content.erase(remove(content.begin(), content.end(), '\t'), content.end());
+	wstring contentInfo = content;
+
+	const wregex re(L"(<span[^>]*style=['|\"](.*?)['|\"].*?>)", regex::icase);
+
+	wsmatch results;
+	if (regex_match(contentInfo.cbegin(), contentInfo.cend(), results, re))
+	{
+		style = results[2];
+		wcout << "Name = " << style << endl;
+	}
+	return style;
+}
+
+Attribute Parser::getAttributes(wstring tag, wstring content)
+{
+	Attribute attrs;
+	wstring page = content;
+	wstring onetag = L"";
+	int foundS = 0;
+	int foundE = 0;
+
+	foundS = page.find(L"<" + tag);
+	foundE = page.find(L">");
+
+	onetag = page.substr(foundS, foundE - foundS + 1);
+
+	//form 加己
+	attrs.form.action = getFormAction(onetag);
+	attrs.form.method = getFormMethod(onetag);
+
+	//input 加己
+	attrs.input.value = getInputValue(onetag);
+	attrs.input.type = getInputType(onetag);
+	attrs.input.name = getInputName(onetag);
+
+	//img 加己
+	attrs.img = getImgInfo(onetag);
+
+	//span 加己
+	attrs.font.style = getSpanstyle(onetag);
+
+	return attrs;
 }

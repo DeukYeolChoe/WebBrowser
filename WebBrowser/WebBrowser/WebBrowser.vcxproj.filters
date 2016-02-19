@@ -30,6 +30,9 @@
     <ClCompile Include="imager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="tree.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="parser.h">
@@ -42,6 +45,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="imager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="tree.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,6 +7,8 @@
 #include <string>
 #include <regex>
 #include <algorithm>
+#include <codecvt>
+#include "tree.h"
 
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #pragma warning(disable:4996)
@@ -15,44 +17,25 @@ using namespace std;
 
 #define BUFSIZE 1024
 
-struct ImgInfo {
-	string src;
-	string width;
-	string height;
-};
-
-struct HtmlInfo {
-	string status;
-	string head;
-	string body;
-};
-
-struct InputInfo {
-	string type;
-	string name;
-	string value;
-};
-
 class Parser
 {
 	private:
 	protected:
 	public:
-		HtmlInfo htmlInfo;
-
 		Parser();
-		string getIPaddrsFromURL(char* url);
-		string getPortFromURL(char* url);
-		string getPathFromURL(char* url);
-		string getHTMLTag(string content);
-		string removeHTMLTag(string content);
-		ImgInfo getImgInfo(string content);
-		HtmlInfo getHttpHeadBody(string content);
-		string getFormAction(string content);
-		string getFormMethod(string content);
-		string getInputType(string content);
-		string getInputValue(string content);
-		string getInputName(string content);
+		string getIPaddrsFromURL(string url);
+		string getPortFromURL(string url);
+		string getPathFromURL(string url);
+		wstring getHTMLTag(wstring content);
+		wstring removeHTMLTag(wstring content);
+		ImgAttr getImgInfo(wstring content);
+		wstring getFormAction(wstring content);
+		wstring getFormMethod(wstring content);
+		wstring getInputType(wstring content);
+		wstring getInputValue(wstring content);
+		wstring getInputName(wstring content);
+		wstring getSpanstyle(wstring content);
+		Attribute getAttributes(wstring tag, wstring content);
 };
 
 #endif

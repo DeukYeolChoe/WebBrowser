@@ -1,0 +1,15 @@
+﻿  main.cpp
+c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\Imager.h(17): warning C4005: '_UNICODE': macro redefinition
+  c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\Imager.h(17): note: command-line arguments:  see previous definition of '_UNICODE'
+c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\Imager.h(18): warning C4005: 'UNICODE': macro redefinition
+  c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\Imager.h(18): note: command-line arguments:  see previous definition of 'UNICODE'
+main.cpp(169): warning C4018: '<': signed/unsigned mismatch
+main.cpp(261): warning C4018: '<': signed/unsigned mismatch
+main.cpp(330): warning C4018: '<': signed/unsigned mismatch
+main.cpp(524): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  1 of 1697 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  WebBrowser.vcxproj -> C:\Users\DEUKYEOLCHOE\Desktop\(2016.02.18)WebBrowser\(2016.02.17)WebBrowser\WebBrowser\Release\WebBrowser.exe

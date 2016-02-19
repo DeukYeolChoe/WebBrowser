@@ -10,14 +10,13 @@ Socket::Socket()
 {
 }
 
-int Socket::ClientToServer(char* url, HWND hWnd, string method, string param, bool flag)
+int Socket::ClientToServer(wchar_t* url, HWND hWnd, string method, string param, bool flag)
 {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	Parser parser;
 	Validate valid;
 	Imager imager;
-	HtmlInfo htmlInfo;
 	FILE *wfp;
 
 	struct addrinfo *result = NULL, *ptr = NULL, hints;
@@ -31,10 +30,26 @@ int Socket::ClientToServer(char* url, HWND hWnd, string method, string param, bo
 	bool imgCreated = false;
 	int iResult;
 
-	if (valid.isURLValid(url) == -1) return 4001;
-	ipAddrs = parser.getIPaddrsFromURL(url);
-	port = parser.getPortFromURL(url);
-	path = parser.getPathFromURL(url);
+	wstring ws(url);
+	string strurl(ws.begin(), ws.end());
+
+	if (valid.isURLValid(strurl) == -1) return 4001;
+	ipAddrs = parser.getIPaddrsFromURL(strurl);
+	port = parser.getPortFromURL(strurl);
+	path = parser.getPathFromURL(strurl);
+
+	// 파일 열기
+	if (flag)
+	{
+		// 만약 존재한다면 받지 않는다.
+		if (isFileExist(path))
+			return 0;
+		// 지금은 http:// 에서 바로 그림 받아오기능 안됨
+		if ((iResult = path.find("http://")) >= 0)
+			return 1;
+		string imgPath = imager.GetExeFileName(path);
+		wfp = fopen(imgPath.c_str(), "wb");
+	}
 
 	strcpy(sendbuf, createHTTPHeader(method, path, param).c_str());
 
@@ -97,7 +112,8 @@ int Socket::ClientToServer(char* url, HWND hWnd, string method, string param, bo
 		WSACleanup();
 		return -1;
 	}
-
+	std::memset(&sendbuf, '\0', sizeof(sendbuf));
+	
 	printf("Bytes Sent: %ld\n", iResult);
 
 	// Shutdown the connection since no more data will be sent
@@ -109,27 +125,12 @@ int Socket::ClientToServer(char* url, HWND hWnd, string method, string param, bo
 		return -1;
 	}
 
-	// 파일 열기
-	if (flag)
-	{
-		// 만약 존재한다면 받지 않는다.
-		if (isFileExist(path))
-			return 0;
-		string imgPath = imager.GetExeFileName(path);
-		wfp = fopen(imgPath.c_str(), "wb");
-	}
-
 	// Receive until the peer closes the connection
 	std::memset(&recvbuf, '\0', sizeof(recvbuf));
-	vector<string> temp_repository;
+	string repository = "";
 	while ((iResult = recv(ConnectSocket, recvbuf, BUFSIZE, 0)) > 0)
 	{
-		//int nLen = MultiByteToWideChar(CP_UTF8, 0, recvbuf, sizeof(recvbuf), NULL, 0);
-		//wstring wstr(nLen, 0);
-		//MultiByteToWideChar(CP_UTF8, 0, recvbuf, -1, &wstr[0], nLen);		
-		//wcout << wstr << endl;
-
-		//temp_repository.push_back(bstr);
+		repository.append(recvbuf);
 
 		if ((path.find(".bmp") >= 0 || path.find(".jpg") >= 0) && flag && strstr(recvbuf, "HTTP/1.") == 0)
 		{
@@ -138,16 +139,15 @@ int Socket::ClientToServer(char* url, HWND hWnd, string method, string param, bo
 		else if (iResult == 0) printf("Connection closed\n");
 		else printf("recv failed with error: %d\n", WSAGetLastError());
 
-		std::memset(&recvbuf, '\0', sizeof(recvbuf));
+		std::memset(&recvbuf, '\0', sizeof(recvbuf));	
 	}
 
-	string combineEntireHtml = "";
-	for (int i = 0; i < temp_repository.size(); i ++)
-	{	
-		combineEntireHtml.append(temp_repository[i]);
-	}
-	//v_htmlBuf는 한페이지 전체 정보를 담고 ;있어야한다.
-	v_htmlBuf.push_back(combineEntireHtml);
+	int nLen = MultiByteToWideChar(CP_UTF8, 0, repository.c_str(), repository.length(), NULL, 0);
+	wstring wstr(nLen, 0);
+	MultiByteToWideChar(CP_UTF8, 0, repository.c_str(), -1, &wstr[0], nLen);
+	wcout << wstr << endl;
+
+	v_htmlBuf.push_back(wstr);
 
 	// cleanup
 	closesocket(ConnectSocket);
@@ -226,7 +226,7 @@ string Socket::createHTTPHeader(string method, string file, string param)
 	header.append(method + " ");
 	header.append(file + " ");
 	header.append("HTTP/1.1\r\n\r\n");
-	header.append("Host: DeukyeolChoe\r\n");
+	header.append("Host: www.naver.com\r\n"); //여기 수정해야함
 	header.append("Connection: keep-alive\r\n");
 	if (method == "POST")
 	{
@@ -236,12 +236,12 @@ string Socket::createHTTPHeader(string method, string file, string param)
 	}
 	header.append("Cache-Control: max-age=0 \r\n");
 	header.append("Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 \r\n");
-	header.append("Origin: \r\n");
+	//header.append("Origin: \r\n");
 	header.append("Upgrade-Insecure-Requests: 1 \r\n");
 	header.append("User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36 \r\n");
 	header.append("Content-Type: application/x-www-form-urlencoded \r\n");
 	header.append("Referer: \r\n");
-	header.append("Accept-Encoding: gzip, deflate \r\n");
+	header.append("Accept-Encoding: gzip, deflate, sdch \r\n");
 	header.append("Accept-Language: ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4 \r\n\r\n");
 	header.append(param);
 	return header;
