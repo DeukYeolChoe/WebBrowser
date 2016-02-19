@@ -127,7 +127,6 @@ wstring Tree::removeHttpHeader(wstring contents)
 		removedResponse = removedResponse.erase(0, foundE + strlen("<!doctype html>"));
 	}
 
-
 	return removedResponse;
 }
 

@@ -1,7 +1,2 @@
-﻿  socket.cpp
-c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\imager.h(17): warning C4005: '_UNICODE': macro redefinition
-  c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\imager.h(17): note: command-line arguments:  see previous definition of '_UNICODE'
-c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\imager.h(18): warning C4005: 'UNICODE': macro redefinition
-  c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\imager.h(18): note: command-line arguments:  see previous definition of 'UNICODE'
-c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\socket.cpp(27): warning C4101: 'split': unreferenced local variable
+﻿  tree.cpp
   WebBrowser.vcxproj -> C:\Users\DEUKYEOLCHOE\Desktop\(2016.02.18)WebBrowser\(2016.02.17)WebBrowser\WebBrowser\Debug\WebBrowser.exe

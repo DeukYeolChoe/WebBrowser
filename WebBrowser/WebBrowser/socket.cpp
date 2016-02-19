@@ -128,10 +128,13 @@ int Socket::ClientToServer(wchar_t* url, HWND hWnd, string method, string param,
 	// Receive until the peer closes the connection
 	std::memset(&recvbuf, '\0', sizeof(recvbuf));
 	string repository = "";
+	int totalBytes = 0;
+	wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+
 	while ((iResult = recv(ConnectSocket, recvbuf, BUFSIZE, 0)) > 0)
 	{
-		repository.append(recvbuf);
-
+		repository.append(recvbuf, iResult);
+		totalBytes += iResult;
 		if ((path.find(".bmp") >= 0 || path.find(".jpg") >= 0) && flag && strstr(recvbuf, "HTTP/1.") == 0)
 		{
 			fwrite(recvbuf, iResult, 1, wfp);
@@ -142,7 +145,7 @@ int Socket::ClientToServer(wchar_t* url, HWND hWnd, string method, string param,
 		std::memset(&recvbuf, '\0', sizeof(recvbuf));	
 	}
 
-	int nLen = MultiByteToWideChar(CP_UTF8, 0, repository.c_str(), repository.length(), NULL, 0);
+	int nLen = MultiByteToWideChar(CP_UTF8, 0, repository.c_str(), totalBytes, NULL, 0);
 	wstring wstr(nLen, 0);
 	MultiByteToWideChar(CP_UTF8, 0, repository.c_str(), -1, &wstr[0], nLen);
 	wcout << wstr << endl;
