@@ -1,7 +1,21 @@
-﻿  socket.cpp
-c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\imager.h(17): warning C4005: '_UNICODE': macro redefinition
-  c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\imager.h(17): note: command-line arguments:  see previous definition of '_UNICODE'
-c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\imager.h(18): warning C4005: 'UNICODE': macro redefinition
-  c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\imager.h(18): note: command-line arguments:  see previous definition of 'UNICODE'
-c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\socket.cpp(27): warning C4101: 'split': unreferenced local variable
-  WebBrowser.vcxproj -> C:\Users\DEUKYEOLCHOE\Desktop\(2016.02.18)WebBrowser\(2016.02.17)WebBrowser\WebBrowser\Debug\WebBrowser.exe
+﻿Build started 2/20/2016 2:07:34 AM.
+     1>Project "C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\WebBrowser\WebBrowser.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt parser.cpp
+         parser.cpp
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\parser.cpp(109): warning C4018: '>': signed/unsigned mismatch
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\parser.cpp(114): warning C4018: '>': signed/unsigned mismatch
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\parser.cpp(121): warning C4244: '=': conversion from 'wchar_t' to 'char', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\Debug\WebBrowser.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\Debug\WebBrowser.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\Debug\WebBrowser.lib" /MACHINE:X86 Debug\tree.obj
+         Debug\imager.obj
+         Debug\parser.obj
+         Debug\socket.obj
+         Debug\main.obj
+         Debug\validate.obj
+         WebBrowser.vcxproj -> C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\Debug\WebBrowser.exe
+     1>Done Building Project "C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\WebBrowser\WebBrowser.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.37

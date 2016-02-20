@@ -31,6 +31,7 @@ int Socket::ClientToServer(wchar_t* url, HWND hWnd, string method, string param,
 	int iResult;
 	int found = 0;
 
+
 	wstring ws(url);
 	string strurl(ws.begin(), ws.end());
 

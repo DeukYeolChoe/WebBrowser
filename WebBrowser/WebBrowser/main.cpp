@@ -128,6 +128,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			//http://52.192.132.151:8888/example0.html
 			hEdit_ip = CreateWindowEx(
 				WS_EX_WINDOWEDGE, L"EDIT", L"http://www.naver.com", WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_LEFT, 80, 10, 600, 30, hWnd, (HMENU)(101), g_hinst, NULL);
+
 			CreateWindow(L"button", L"<-", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 10, 30, 30, hWnd, (HMENU)0, g_hinst, NULL);
 			CreateWindow(L"button", L"->", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 40, 10, 30, 30, hWnd, (HMENU)1, g_hinst, NULL);
 			
