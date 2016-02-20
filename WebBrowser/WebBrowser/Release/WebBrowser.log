@@ -1,15 +1,48 @@
-﻿  main.cpp
-c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\Imager.h(17): warning C4005: '_UNICODE': macro redefinition
-  c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\Imager.h(17): note: command-line arguments:  see previous definition of '_UNICODE'
-c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\Imager.h(18): warning C4005: 'UNICODE': macro redefinition
-  c:\users\deukyeolchoe\desktop\(2016.02.18)webbrowser\(2016.02.17)webbrowser\webbrowser\webbrowser\Imager.h(18): note: command-line arguments:  see previous definition of 'UNICODE'
-main.cpp(169): warning C4018: '<': signed/unsigned mismatch
-main.cpp(261): warning C4018: '<': signed/unsigned mismatch
-main.cpp(330): warning C4018: '<': signed/unsigned mismatch
-main.cpp(524): warning C4018: '<': signed/unsigned mismatch
-  Generating code
-  1 of 1697 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  WebBrowser.vcxproj -> C:\Users\DEUKYEOLCHOE\Desktop\(2016.02.18)WebBrowser\(2016.02.17)WebBrowser\WebBrowser\Release\WebBrowser.exe
+﻿Build started 2/20/2016 2:18:10 AM.
+     1>Project "C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\WebBrowser\WebBrowser.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt tree.cpp imager.cpp parser.cpp socket.cpp main.cpp validate.cpp
+         tree.cpp
+         imager.cpp
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\imager.h(17): warning C4005: '_UNICODE': macro redefinition
+         c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\imager.h(17): note: command-line arguments:  see previous definition of '_UNICODE'
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\imager.h(18): warning C4005: 'UNICODE': macro redefinition
+         c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\imager.h(18): note: command-line arguments:  see previous definition of 'UNICODE'
+         parser.cpp
+     1>parser.cpp(109): warning C4018: '>': signed/unsigned mismatch
+     1>parser.cpp(114): warning C4018: '>': signed/unsigned mismatch
+     1>parser.cpp(121): warning C4244: '=': conversion from 'wchar_t' to 'char', possible loss of data
+         socket.cpp
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\Imager.h(17): warning C4005: '_UNICODE': macro redefinition
+         c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\Imager.h(17): note: command-line arguments:  see previous definition of '_UNICODE'
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\Imager.h(18): warning C4005: 'UNICODE': macro redefinition
+         c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\Imager.h(18): note: command-line arguments:  see previous definition of 'UNICODE'
+     1>socket.cpp(27): warning C4101: 'split': unreferenced local variable
+         main.cpp
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\Imager.h(17): warning C4005: '_UNICODE': macro redefinition
+         c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\Imager.h(17): note: command-line arguments:  see previous definition of '_UNICODE'
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\Imager.h(18): warning C4005: 'UNICODE': macro redefinition
+         c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\Imager.h(18): note: command-line arguments:  see previous definition of 'UNICODE'
+     1>main.cpp(170): warning C4018: '<': signed/unsigned mismatch
+     1>main.cpp(262): warning C4018: '<': signed/unsigned mismatch
+     1>main.cpp(333): warning C4018: '<': signed/unsigned mismatch
+     1>main.cpp(526): warning C4018: '<': signed/unsigned mismatch
+         validate.cpp
+     1>validate.cpp(45): warning C4018: '<': signed/unsigned mismatch
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\Release\WebBrowser.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\Release\WebBrowser.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\Release\WebBrowser.lib" /MACHINE:X86 /SAFESEH Release\tree.obj
+         Release\imager.obj
+         Release\parser.obj
+         Release\socket.obj
+         Release\main.obj
+         Release\validate.obj
+         Generating code
+     1>c:\users\deukyeol\desktop\mygithub\webbrowser\webbrowser\main.cpp(752): warning C4715: 'executeCmd': not all control paths return a value
+         All 1733 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         Finished generating code
+         WebBrowser.vcxproj -> C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\Release\WebBrowser.exe
+     1>Done Building Project "C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\WebBrowser\WebBrowser.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.27

@@ -24,7 +24,6 @@ int Socket::ClientToServer(wchar_t* url, HWND hWnd, string method, string param,
 
 	char sendbuf[BUFSIZE];
 	char recvbuf[BUFSIZE];
-	char* split;
 
 	string path;	
 	bool imgCreated = false;
@@ -257,7 +256,7 @@ string Socket::createHTTPHeader(string method, string ipAddrs ,string file, stri
 	//header.append("Origin: \r\n");
 	header.append("Upgrade-Insecure-Requests: 1 \r\n");
 	header.append("User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36 \r\n");
-	header.append("Content-Type: application/x-www-form-urlencoded \r\n");
+	//header.append("Content-Type: application/x-www-form-urlencoded \r\n");
 	//header.append("Referer: \r\n");
 	//¿£ÄÚµù
 	header.append("Accept-Encoding: gzip, deflate, sdch \r\n");

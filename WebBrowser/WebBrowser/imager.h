@@ -10,12 +10,11 @@
 #include <stdio.h>
 #include <gdiplus.h>
 #include <fstream>
-//#include <tchar.h>
 #include <string>
 #include <vector>
 
-#define _UNICODE
-#define UNICODE
+//#define _UNICODE
+//#define UNICODE
 
 using namespace Gdiplus;
 #pragma comment(lib, "gdiplus.lib")
