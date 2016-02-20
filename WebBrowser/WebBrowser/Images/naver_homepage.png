@@ -1,0 +1,46 @@
+oking for is currently
+    unavailable. The Web site might be experiencing technical difficulties, or you may need to
+    adjust your browser settings.</font></td>
+  </tr>
+  <tr>
+    <td id="tablePropsWidth" width="400" colspan="2"><font id="LID1"
+    style="COLOR: black; FONT: 8pt/11pt verdana"><hr color="#C0C0C0" noshade>
+    <p id="LID2">Please try the following:</p><ul>
+      <li id="instructionsText1">Click the 
+	<a href="javascript:location.reload()" target="_self">Refresh</a> button, or try again later.<br>
+      </li>
+      
+      <li id="instructionsText2">If you typed the page address manually, make sure that it is 
+      spelled correctly.<br>
+      </li>
+      <li id="instructionsText3">
+        Make sure that the network settings of your web browser match those provided by your local area network (LAN) administrator or Internet service provider (ISP). </li>
+     <li ID="list4">If your Network Administrator has enabled it, 
+      your OS can examine your network and automatically discover network connection settings.<BR>
+         If you are using Microsoft Windows, and if you want to try and discover them,
+         click <a  href="javascript:doNetDetect()" title="Detect Settings">
+	 Detect Network Settings</a> 
+      </li>
+    <li id="instructionsText5">
+       Some sites require 128-bit connection security. Check your browser's preference setting
+       to determine what strength security you have installed.
+    </li>
+    <li id="instructionsText4">
+       If you are trying to reach a secure site, make sure your Security settings can support it. 
+       Check your browser settings for SSL 2.0, SSL 3.0, TLS 1.0, PCT 1.0. 
+    </li>
+     <li id="list3">Click the <a href="javascript:history.back(1)">
+     Back</a> button to try another link. </li>    
+      
+      
+    </ul>
+    <p><br>
+    </p>
+    <h2 id="IEText" style="font:8pt/11pt verdana; color:black">HTTP 400 - Bad Request<BR> jaguar    
+	
+    </h2>
+    </font></td>
+  </tr>
+</table>
+</body>
+</html>
