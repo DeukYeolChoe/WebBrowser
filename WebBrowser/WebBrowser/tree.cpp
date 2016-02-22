@@ -25,7 +25,9 @@ Node Tree::createTree(wstring htmlTags)
 
 	while (page.length() > 0)
 	{
-		Node node;
+		//초기화
+		Node node; 
+
 		//<!-- --> 안에 있는 내용 다 지우자
 		page = removeComments(page);
 		//<![CDATA[ //]]> 지우자
@@ -46,10 +48,9 @@ Node Tree::createTree(wstring htmlTags)
 					content.erase(remove(content.begin(), content.end(), '\r'), content.end());
 					content.erase(remove(content.begin(), content.end(), '\n'), content.end());
 				}
-				if (htmlStack.size() > 0 && wcscmp(content.c_str(), L"") != 0)
+				if (htmlStack.size() > 0 && wcscmp(content.c_str(), L"") != 0 && tag != L"title")
 				{
 					node.tag = L"text";
-					wcout << L"[" << content << L"]" << endl;
 					node.content = content;
 					htmlStack.top().children.push_back(node);	
 				}		
@@ -59,6 +60,7 @@ Node Tree::createTree(wstring htmlTags)
 		else if (opening && closing)
 		{
 			tag = parser.getHTMLTag(page);
+			transform(tag.begin(), tag.end(), tag.begin(), ::tolower);
 
 			//이 태그안에서 속성들을 다시 파싱해줘야한다.
 			//상황에 맞게 node에 속성들을 넣어주자
@@ -70,9 +72,11 @@ Node Tree::createTree(wstring htmlTags)
 				htmlStack.push(node);
 			}
 			else if (tag == L"br" || tag == L"br/" || tag == L"hr" || tag == L"hr/" || 
-				tag == L"img" || tag == L"meta" || tag == L"link" || tag == L"area" || tag == L"input")
+				tag == L"img" || tag == L"meta" || tag == L"link" || tag == L"area" || tag == L"input" ||
+				tag == L"area" || tag == L"base" || tag == L"embed" || tag == L"keygen" || tag == L"menuitem" || tag == L"meta" || 
+				tag == L"param" || tag == L"source" || tag == L"track" || tag == L"wbr")
 			{
-				//예외처리
+				//Void Elements
 				node.tag = tag;
 				htmlStack.top().children.push_back(node);
 			}
@@ -105,6 +109,22 @@ Node Tree::createTree(wstring htmlTags)
 	}
 	return htmlStack.top();
 }
+
+Attribute Tree::inheritAttrsFromParent(Attribute parent, Attribute child)
+{
+	//폰트 속성
+	if (parent.font.isBold)				child.font.isBold = true;
+	if (parent.font.isCursive)			child.font.isCursive = true;
+	if (parent.font.underscore)			child.font.underscore = true;
+	if (!parent.font.weight.empty())	child.font.weight = parent.font.weight;
+	if (!parent.font.style.empty())		child.font.style = parent.font.style;
+	if (parent.isPre)					child.isPre = parent.isPre;
+	if (parent.isCenter)				child.isCenter = parent.isCenter;
+	if (parent.isP)						child.isP = parent.isP;
+	//if (parent.font.size >= 0)			child.font.size = parent.font.size;
+	return child;
+}
+
 
 wstring Tree::removeHttpHeader(wstring contents)
 {

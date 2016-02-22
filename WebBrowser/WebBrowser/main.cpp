@@ -24,16 +24,14 @@ using namespace std;
 #endif
 #pragma endregion 
 
-
-#define YMOVER 40
-#define XMOVER 40
+#define INITX 30
+#define INITY 40
+#define NEWLINE 30
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK EditSubProc1(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
-//int setResponse(HWND hWnd, HDC hdc, Socket socket, int i);
 int getCmdFromHtmlTag(wstring tag);
 void traveralExecute(HWND hWnd, HDC hdc, Node root, Socket socket);
-//int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, ImgInfo imgInfo, InputInfo inputInfo);
 int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, Attribute attrs);
 int errorEventHandler(HWND hWnd, int n);
 vector<string> split(string str, char delimiter);
@@ -49,6 +47,7 @@ vector<Node> roots;
 vector<HWND> v_inputEdit;
 vector<InputAttr> v_inputInfo;
 Socket socketObj;
+Tree domTree;
 wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
 int x; int y; int g_index; 
@@ -73,7 +72,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpszCmdP
 	decrese = false;
 	increse = false;
 	disableWMPaint = false;
-	xCur = XMOVER; yCur = YMOVER;
+	xCur = INITX; yCur = INITY;
 	submitId = -1;
 	g_index = -1;
 
@@ -117,7 +116,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	Imager imager;
 	PAINTSTRUCT ps;
 	HDC hdc;
-	Tree domTree;
 
 	int xInc; int yInc;
 
@@ -125,10 +123,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	{
 		case WM_CREATE:
 		{
-			//http://52.192.132.151:8888/example0.html
-			//http://202.179.177.22/
+			//http://52.192.132.151:8888/example10.html
 			hEdit_ip = CreateWindowEx(
-				WS_EX_WINDOWEDGE, L"EDIT", L"http://www.naver.com", WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_LEFT, 80, 10, 600, 30, hWnd, (HMENU)(101), g_hinst, NULL);
+				WS_EX_WINDOWEDGE, L"EDIT", L"http://52.192.132.151:8888/example10.html", WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER | ES_LEFT, 80, 10, 600, 30, hWnd, (HMENU)(101), g_hinst, NULL);
 
 			CreateWindow(L"button", L"<-", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 10, 30, 30, hWnd, (HMENU)0, g_hinst, NULL);
 			CreateWindow(L"button", L"->", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 40, 10, 30, 30, hWnd, (HMENU)1, g_hinst, NULL);
@@ -238,10 +235,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			yInc = 0;
 			switch (LOWORD(wParam))
 			{
-				case SB_LINEUP:		{ yInc = -10; break; }
-				case SB_LINEDOWN:	{ yInc = 10; break;  }
-				case SB_PAGEUP:		{ yInc = -20; break; }
-				case SB_PAGEDOWN:	{ yInc = 20; break;  }
+				case SB_LINEUP:		{ yInc = -20; break; }
+				case SB_LINEDOWN:	{ yInc = 20; break;  }
+				case SB_PAGEUP:		{ yInc = -25; break; }
+				case SB_PAGEDOWN:	{ yInc = 25; break;  }
 				case SB_THUMBTRACK: { yInc = HIWORD(wParam) - yPos; break; }
 			}
 			if (yPos + yInc < 0) yInc = -yPos;
@@ -273,8 +270,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 						roots.push_back(root);
 					}
 					
-					x = XMOVER - xPos;
-					y = YMOVER - yPos;
+					x = INITX - xPos;
+					y = INITY - yPos;
 
 					// recursive를 이용하여 실행
 					traveralExecute(hWnd, hdc, roots.at(g_index), socketObj);
@@ -326,20 +323,22 @@ void traveralExecute(HWND hWnd, HDC hdc, Node root, Socket socket)
 {
 	if (root.children.size() == 0)
 	{
-		wcout << root.tag << "=" << root.content << endl;
+		//wcout << root.tag << "=" << root.content << endl;
 		executeCmd(hWnd, hdc, socket, root.tag, root.content, root.attributes);
 		return;
 	}
 
 	for (int i = 0; i < root.children.size(); i++)
 	{
-		traveralExecute(hWnd, hdc, root.children.at(i), socket);		
+		// 만약 현재 노드가 부모 노드라면  children에게 자신의 속성을 줘야한다
+		root.children.at(i).attributes = domTree.inheritAttrsFromParent(root.attributes, root.children.at(i).attributes);
+		traveralExecute(hWnd, hdc, root.children.at(i), socket);
 	}
 }
 
 int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, Attribute attrs)
 {
-	enum htmlTag { a = 0, h1, h2, h3, h4, h5, h6, hr, br = 10, div = 11, address, span,  
+	enum htmlTag { a = 0, hr = 7, br = 10, div = 11, address, span,  
 					p = 20, b, pre, ul = 30, ol, input = 40, center = 100, table = 200, img = 1000, form };
 
 	int cmd;
@@ -349,241 +348,69 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 		return 0;
 	
 	cmd = getCmdFromHtmlTag(tag);
+	x = INITX;
 
 	switch (cmd)
 	{
-		case a:
-		{
-			return 0;
-		}
-		case h1:
-		{
-			font = CreateFont(40, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = XMOVER;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());	
-			//yCur = y + 40;
-			y += YMOVER;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
-		case h2:
-		{
-			font = CreateFont(35, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = XMOVER;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			//yCur = y + 35;
-			y += YMOVER;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
-		case h3:
-		{
-			font = CreateFont(30, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = XMOVER;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			//yCur = y + 30;
-			y += YMOVER;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
-		case h4:
-		{
-			font = CreateFont(25, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = XMOVER;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			y += YMOVER;
-			//yCur = y + 25;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
-		case h5:
-		{
-			font = CreateFont(20, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = XMOVER;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			//yCur = y + 20;
-			y += YMOVER;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
-		case h6:
-		{
-			font = CreateFont(15, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = XMOVER;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			//yCur = y + 15;
-			y += YMOVER;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
 		case hr:
 		{
 			Graphics graphics(hdc);
 			Pen pen(Color(0, 0, 0));
-			//y = yCur;
+			y += NEWLINE;
 			graphics.DrawLine(&pen, 0, y, 8000, y);
-			y += YMOVER;
-		}
-		case div:
-		{
-			return 0;
-		}
-		case address:
-		{
-			font = CreateFont(25, 0, 0, 0, 20, TRUE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = XMOVER;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			//yCur = y + 25;
-			y += YMOVER;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
-		case span:
-		{
-			font = CreateFont(25, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-
-			wstring style = attrs.font.style;
-			int foundS = style.find(L"color:");
-			if (foundS >= 0)
-			{
-				style = style.erase(foundS, strlen("color:"));
-				if (style == L"blue") SetTextColor(hdc, RGB(0, 0, 255));
-				else if (style == L"red") SetTextColor(hdc, RGB(255, 0, 0));
-				else if (style == L"yellow") SetTextColor(hdc, RGB(255, 255, 0));
-				else if (style == L"green") SetTextColor(hdc, RGB(0, 255, 0));
-			}
-			//x = xCur;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			//xCur = x + content.length();
-			y += YMOVER;
-			SetTextColor(hdc, RGB(0, 0, 0));
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
-		case b:
-		{
-			font = CreateFont(25, 0, 0, 0, FW_BOLD, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = xCur;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			//xCur = x + content.length();
-			//yCur = y + 25; // 일단은 newline 으로 넘기자
-			y += YMOVER;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
-		}
-		case p:
-		{
-			font = CreateFont(20, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			oldfont = (HFONT)SelectObject(hdc, font);
-			//x = XMOVER;
-			//y = yCur;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			//yCur = y + 20;
-			y += YMOVER;
-			SelectObject(hdc, oldfont);
-			DeleteObject(font);
-			return 0;
+			y += NEWLINE;
 		}
 		case br:
 		{
-			y += YMOVER;
-			return 0;
-		}
-		case pre:
-		{
-			//\t랑 \n 적용되어야한다
-			x = XMOVER;
-			
-			int i;
-			vector<string> contents = split(converter.to_bytes(content), '\n');
-			font = CreateFont(20, 0, 0, 0, 20, FALSE, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
-			for (i = 0; i < contents.size(); i++)
-			{
-				//y = yCur;
-				if (contents[i].empty())
-					continue;
-				TextOut(hdc, x, y, (LPWSTR)contents[i].c_str(), strlen(contents[i].c_str()));
-				//yCur = y + 20;
-				y += YMOVER;
-				oldfont = (HFONT)SelectObject(hdc, font);
-				SelectObject(hdc, oldfont);
-				DeleteObject(font);
-			}		
+			y += NEWLINE;
 			return 0;
 		}
 		case ul:
 		{
-			int foundS = 0;
-			int foundE = 0;
-			x += XMOVER;
-			while (1)
-			{
-				wstring subcontent = L"";
-				if ((foundS = content.find(L"<li>")) < 0) break;
-				if ((foundE = content.find(L"</li>")) < 0) break;
-				subcontent = content.substr(foundS + 4, foundE - (foundS + 4));
-				wstring combined = L"@. ";
-				combined.append(subcontent);
-				TextOutW(hdc, x, y, combined.c_str(), combined.length());
-				content.erase(0, foundE + 5);
-				y += YMOVER;
-			}
-			x -= XMOVER;
+			//int foundS = 0;
+			//int foundE = 0;
+			//x += XMOVER;
+			//while (1)
+			//{
+			//	wstring subcontent = L"";
+			//	if ((foundS = content.find(L"<li>")) < 0) break;
+			//	if ((foundE = content.find(L"</li>")) < 0) break;
+			//	subcontent = content.substr(foundS + 4, foundE - (foundS + 4));
+			//	wstring combined = L"@. ";
+			//	combined.append(subcontent);
+			//	TextOutW(hdc, x, y, combined.c_str(), combined.length());
+			//	content.erase(0, foundE + 5);
+			//	y += YMOVER;
+			//}
+			//x -= XMOVER;
 			return 0;
 		}
 		case ol:
 		{
-			int foundS = 0;
-			int foundE = 0;
-			int i = 1;
-			x += XMOVER;
-			while (1)
-			{
-				wstring subcontent = L"";
-				if ((foundS = content.find(L"<li>")) < 0) break;
-				if ((foundE = content.find(L"</li>")) < 0) break;
-				subcontent = content.substr(foundS + 4, foundE - (foundS + 4));
-				wstring combined = std::to_wstring(i);
-				combined.append(L". ");
-				combined.append(subcontent);
-				TextOutW(hdc, x, y, combined.c_str(), combined.length());
-				content.erase(0, foundE + 5);
-				y += YMOVER;
-				i++;
-			}
-			x -= XMOVER;
+			//int foundS = 0;
+			//int foundE = 0;
+			//int i = 1;
+			//x += XMOVER;
+			//while (1)
+			//{
+			//	wstring subcontent = L"";
+			//	if ((foundS = content.find(L"<li>")) < 0) break;
+			//	if ((foundE = content.find(L"</li>")) < 0) break;
+			//	subcontent = content.substr(foundS + 4, foundE - (foundS + 4));
+			//	wstring combined = std::to_wstring(i);
+			//	combined.append(L". ");
+			//	combined.append(subcontent);
+			//	TextOutW(hdc, x, y, combined.c_str(), combined.length());
+			//	content.erase(0, foundE + 5);
+			//	y += YMOVER;
+			//	i++;
+			//}
+			//x -= XMOVER;
 			return 0;
 		}
 		case input:
 		{
-			//			else if (htmlTag == L"input")
+			//			if (htmlTag == L"input")
 			//			{
 			//				foundS = socket.v_htmlBuf[page].find(L"<");
 			//				foundE = socket.v_htmlBuf[page].find(L">");
@@ -610,16 +437,6 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 			//disableWMPaint = true;
 			//input_id++;
 			//x -= XMOVER * 2;
-			return 0;
-		}
-		case center:
-		{
-			HANDLE screen = GetStdHandle(STD_OUTPUT_HANDLE);
-			COORD max_size = GetLargestConsoleWindowSize(screen);
-			COORD pos;
-			pos.X = (max_size.X - sizeof(content)) / 2;		
-			TextOutW(hdc, pos.X, y, content.c_str(), content.length());
-			y += YMOVER;
 			return 0;
 		}
 		case table:
@@ -715,9 +532,8 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 			int width = atoi(converter.to_bytes(attrs.img.width).c_str());
 			int height = atoi(converter.to_bytes(attrs.img.height).c_str());
 			imager.setImage(hWnd, hdc, wimgPath.c_str(), x, y, width, height);
-			xCur = x + width;
-			yCur = y + height;
-			x += width;
+			//x += width;
+			y += height;
 			return 0;
 		}
 		case form:
@@ -743,10 +559,64 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 		}
 		default:
 		{
-			if (content.empty() || tag == L"title" || tag == L"meta")
-				break;
-			TextOutW(hdc, x, y, content.c_str(), content.length());
-			y += YMOVER;
+			HANDLE screen = GetStdHandle(STD_OUTPUT_HANDLE);
+			COORD max_size = GetLargestConsoleWindowSize(screen);
+			int isBold = 300;
+
+			//x는 원위치
+			//x = XMOVER;
+
+			// 폰트 칼라
+			wstring style = attrs.font.style;
+			int foundS = style.find(L"color:");
+			if (foundS >= 0)
+			{
+				style = style.erase(foundS, strlen("color:"));
+				if (style == L"blue") SetTextColor(hdc, RGB(0, 0, 255));
+				else if (style == L"red") SetTextColor(hdc, RGB(255, 0, 0));
+				else if (style == L"yellow") SetTextColor(hdc, RGB(255, 255, 0));
+				else if (style == L"green") SetTextColor(hdc, RGB(0, 255, 0));
+			}
+
+			if (attrs.font.isBold) isBold = FW_BOLD;
+			if (attrs.isP) y += NEWLINE;
+			if (attrs.isCenter) x = (max_size.X - sizeof(content)) / 2;
+
+			if (attrs.isPre)
+			{
+				int i;
+				vector<string> contents = split(converter.to_bytes(content), '\n');
+				for (i = 0; i < contents.size(); i++)
+				{
+					contents[i].erase(remove(contents[i].begin(), contents[i].end(), '\t'), contents[i].end());
+					if (contents[i].empty())
+						continue;
+					font = CreateFont(attrs.font.size, 0, 0, 0, isBold, attrs.font.isCursive, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
+					oldfont = (HFONT)SelectObject(hdc, font);
+					TextOutW(hdc, x, y, content.c_str(), content.length());
+					SelectObject(hdc, oldfont);
+					DeleteObject(font);
+
+					//좌표 계산
+					//xCur = x + content.length() * 7;
+					//if (contents.size() > 1)	
+				}
+			}
+			else
+			{
+				font = CreateFont(attrs.font.size, 0, 0, 0, isBold, attrs.font.isCursive, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
+				oldfont = (HFONT)SelectObject(hdc, font);			
+				TextOutW(hdc, x, y, content.c_str(), content.length());
+				SelectObject(hdc, oldfont);
+				DeleteObject(font);
+
+				//좌표 계산
+				//x += content.length() * 7;
+			}
+			if (attrs.isP) y += NEWLINE;
+			SetTextColor(hdc, RGB(0, 0, 0));
+			y += NEWLINE;
+			//DeleteObject(font);
 			return 0;
 		}
 	}

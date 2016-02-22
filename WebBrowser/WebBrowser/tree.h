@@ -30,9 +30,11 @@ struct InputAttr {
 };
 
 struct FontAttr {
-	wstring size;
+	int size;
 	wstring weight;
 	wstring style;
+	bool isBold;
+	bool isCursive;
 	bool underscore;
 };
 
@@ -41,6 +43,9 @@ struct Attribute {
 	FormAttr form;
 	InputAttr input;
 	FontAttr font;
+	bool isPre;
+	bool isP;
+	bool isCenter;
 };
 
 struct Node {
@@ -54,6 +59,7 @@ class Tree {
 	public:
 		Tree();
 		Node createTree(wstring htmlcontents);
+		Attribute inheritAttrsFromParent(Attribute parent, Attribute child);
 		wstring removeHttpHeader(wstring contents);
 		wstring removeComments(wstring page);
 		wstring removeCDATA(wstring contents);

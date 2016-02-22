@@ -272,25 +272,51 @@ Attribute Parser::getAttributes(wstring tag, wstring content)
 	int foundS = 0;
 	int foundE = 0;
 
+	//초기화
+	attrs.isPre = false; attrs.isP = false; attrs.isCenter = false;
+	attrs.font.isBold = false;  attrs.font.isCursive = false; attrs.font.underscore = false;	
+	attrs.font.size = 20;
+
+	if (tag == L"h1") attrs.font.size = 40;
+	else if (tag == L"h2") attrs.font.size = 35;
+	else if (tag == L"h3") attrs.font.size = 30;
+	else if (tag == L"h4") attrs.font.size = 25;
+	else if (tag == L"h5") attrs.font.size = 20;
+	else if (tag == L"h6") attrs.font.size = 15;
+
+	if (tag == L"pre") attrs.isPre = true;
+	if (tag == L"p") attrs.isP = true;
+	if (tag == L"address") attrs.font.isCursive = true;
+	if (tag == L"b") attrs.font.isBold = true;
+	if (tag == L"center") attrs.isCenter = true;
+ 
+	//태그 전체를 읽어 parsing한다.
 	foundS = page.find(L"<" + tag);
 	foundE = page.find(L">");
-
 	onetag = page.substr(foundS, foundE - foundS + 1);
 
 	//form 속성
-	attrs.form.action = getFormAction(onetag);
-	attrs.form.method = getFormMethod(onetag);
+	if (tag == L"form")
+	{
+		attrs.form.action = getFormAction(onetag);
+		attrs.form.method = getFormMethod(onetag);
+	}
 
 	//input 속성
-	attrs.input.value = getInputValue(onetag);
-	attrs.input.type = getInputType(onetag);
-	attrs.input.name = getInputName(onetag);
+	if (tag == L"input")
+	{
+		attrs.input.value = getInputValue(onetag);
+		attrs.input.type = getInputType(onetag);
+		attrs.input.name = getInputName(onetag);
+	}
 
 	//img 속성
-	attrs.img = getImgInfo(onetag);
+	if (tag == L"img")
+		attrs.img = getImgInfo(onetag);
 
 	//span 속성
-	attrs.font.style = getSpanstyle(onetag);
+	if (tag == L"span")
+		attrs.font.style = getSpanstyle(onetag);
 
 	return attrs;
 }
