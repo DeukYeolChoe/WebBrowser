@@ -273,8 +273,8 @@ Attribute Parser::getAttributes(wstring tag, wstring content)
 	int foundE = 0;
 
 	//초기화
-	attrs.isPre = false; attrs.isP = false; attrs.isCenter = false;
-	attrs.font.isBold = false;  attrs.font.isCursive = false; attrs.font.underscore = false;	
+	attrs.identity.isPre = false; attrs.identity.isP = false; attrs.identity.isCenter = false; attrs.identity.isAddress = false;
+	attrs.font.isBold = false;  attrs.font.isCursive = false; attrs.font.underscore = false; 
 	attrs.font.size = 20;
 
 	if (tag == L"h1") attrs.font.size = 40;
@@ -284,11 +284,12 @@ Attribute Parser::getAttributes(wstring tag, wstring content)
 	else if (tag == L"h5") attrs.font.size = 20;
 	else if (tag == L"h6") attrs.font.size = 15;
 
-	if (tag == L"pre") attrs.isPre = true;
-	if (tag == L"p") attrs.isP = true;
+	if (tag == L"pre") attrs.identity.isPre = true;
+	if (tag == L"p") attrs.identity.isP = true;
+	if (tag == L"center") attrs.identity.isCenter = true;
+	if (tag == L"address") attrs.identity.isAddress = true;
 	if (tag == L"address") attrs.font.isCursive = true;
 	if (tag == L"b") attrs.font.isBold = true;
-	if (tag == L"center") attrs.isCenter = true;
  
 	//태그 전체를 읽어 parsing한다.
 	foundS = page.find(L"<" + tag);

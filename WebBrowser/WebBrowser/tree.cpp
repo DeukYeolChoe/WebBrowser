@@ -118,9 +118,10 @@ Attribute Tree::inheritAttrsFromParent(Attribute parent, Attribute child)
 	if (parent.font.underscore)			child.font.underscore = true;
 	if (!parent.font.weight.empty())	child.font.weight = parent.font.weight;
 	if (!parent.font.style.empty())		child.font.style = parent.font.style;
-	if (parent.isPre)					child.isPre = parent.isPre;
-	if (parent.isCenter)				child.isCenter = parent.isCenter;
-	if (parent.isP)						child.isP = parent.isP;
+	if (parent.identity.isPre)			child.identity.isPre = parent.identity.isPre;
+	if (parent.identity.isCenter)		child.identity.isCenter = parent.identity.isCenter;
+	if (parent.identity.isP)			child.identity.isP = parent.identity.isP;
+	if (parent.identity.isAddress)		child.identity.isAddress = parent.identity.isAddress;
 	//if (parent.font.size >= 0)			child.font.size = parent.font.size;
 	return child;
 }

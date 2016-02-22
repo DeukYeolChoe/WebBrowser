@@ -38,14 +38,20 @@ struct FontAttr {
 	bool underscore;
 };
 
+struct TagAttr {
+	//여기에 있는것중 하나라도 true라면 newline이 되야한다.
+	bool isPre;
+	bool isP;
+	bool isCenter;
+	bool isAddress;
+};
+
 struct Attribute {
 	ImgAttr img;
 	FormAttr form;
 	InputAttr input;
 	FontAttr font;
-	bool isPre;
-	bool isP;
-	bool isCenter;
+	TagAttr identity;
 };
 
 struct Node {

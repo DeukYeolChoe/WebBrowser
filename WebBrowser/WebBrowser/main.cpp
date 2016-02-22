@@ -323,14 +323,13 @@ void traveralExecute(HWND hWnd, HDC hdc, Node root, Socket socket)
 {
 	if (root.children.size() == 0)
 	{
-		//wcout << root.tag << "=" << root.content << endl;
 		executeCmd(hWnd, hdc, socket, root.tag, root.content, root.attributes);
 		return;
 	}
 
 	for (int i = 0; i < root.children.size(); i++)
 	{
-		// 만약 현재 노드가 부모 노드라면  children에게 자신의 속성을 줘야한다
+		// 각각의 노드는 자신의 children에게 자신의 속성을 줘야한다
 		root.children.at(i).attributes = domTree.inheritAttrsFromParent(root.attributes, root.children.at(i).attributes);
 		traveralExecute(hWnd, hdc, root.children.at(i), socket);
 	}
@@ -344,11 +343,11 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 	int cmd;
 	HFONT font, oldfont;
 	Parser parser;
+	int nextLine = 0;
 	if (tag.empty())
 		return 0;
 	
 	cmd = getCmdFromHtmlTag(tag);
-	x = INITX;
 
 	switch (cmd)
 	{
@@ -356,12 +355,17 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 		{
 			Graphics graphics(hdc);
 			Pen pen(Color(0, 0, 0));
+
+			// 사진 높이 넘기기
+			if (yCur > 40) { y = yCur; yCur = INITY; }
 			y += NEWLINE;
 			graphics.DrawLine(&pen, 0, y, 8000, y);
 			y += NEWLINE;
 		}
 		case br:
 		{
+			// 사진 높이 넘기기
+			if (yCur > 40) { y = yCur; yCur = INITY; }
 			y += NEWLINE;
 			return 0;
 		}
@@ -532,8 +536,11 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 			int width = atoi(converter.to_bytes(attrs.img.width).c_str());
 			int height = atoi(converter.to_bytes(attrs.img.height).c_str());
 			imager.setImage(hWnd, hdc, wimgPath.c_str(), x, y, width, height);
-			//x += width;
-			y += height;
+			x += width;
+
+			//사진 같은 경우는 사진 길이를 기억해서 넘겨줘야한다.
+			yCur = y + height;
+
 			return 0;
 		}
 		case form:
@@ -559,6 +566,9 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 		}
 		default:
 		{
+			// 사진 높이 넘기기
+			if (yCur > 40) { y = yCur; yCur = INITY; }
+
 			HANDLE screen = GetStdHandle(STD_OUTPUT_HANDLE);
 			COORD max_size = GetLargestConsoleWindowSize(screen);
 			int isBold = 300;
@@ -578,11 +588,11 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 				else if (style == L"green") SetTextColor(hdc, RGB(0, 255, 0));
 			}
 
-			if (attrs.font.isBold) isBold = FW_BOLD;
-			if (attrs.isP) y += NEWLINE;
-			if (attrs.isCenter) x = (max_size.X - sizeof(content)) / 2;
+			if (attrs.font.isBold)			isBold = FW_BOLD;
+			if (attrs.identity.isCenter)	x = (max_size.X - sizeof(content)) / 2;
+			if (attrs.identity.isP || attrs.identity.isCenter || attrs.identity.isAddress || attrs.identity.isPre) { y += NEWLINE; x = INITX; }
 
-			if (attrs.isPre)
+			if (attrs.identity.isPre)
 			{
 				int i;
 				vector<string> contents = split(converter.to_bytes(content), '\n');
@@ -592,30 +602,32 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 					if (contents[i].empty())
 						continue;
 					font = CreateFont(attrs.font.size, 0, 0, 0, isBold, attrs.font.isCursive, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
+					nextLine = attrs.font.size;
 					oldfont = (HFONT)SelectObject(hdc, font);
 					TextOutW(hdc, x, y, content.c_str(), content.length());
 					SelectObject(hdc, oldfont);
 					DeleteObject(font);
 
 					//좌표 계산
-					//xCur = x + content.length() * 7;
-					//if (contents.size() > 1)	
+					x += content.length() * 7;
+					if (contents.size() > 1) y += nextLine;
 				}
 			}
 			else
 			{
 				font = CreateFont(attrs.font.size, 0, 0, 0, isBold, attrs.font.isCursive, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
+				nextLine = attrs.font.size;
 				oldfont = (HFONT)SelectObject(hdc, font);			
 				TextOutW(hdc, x, y, content.c_str(), content.length());
 				SelectObject(hdc, oldfont);
 				DeleteObject(font);
 
 				//좌표 계산
-				//x += content.length() * 7;
+				x += content.length() * 7;
 			}
-			if (attrs.isP) y += NEWLINE;
+
+			if (attrs.identity.isP || attrs.identity.isCenter || attrs.identity.isAddress || attrs.identity.isPre) { y += nextLine; x = INITX; }
 			SetTextColor(hdc, RGB(0, 0, 0));
-			y += NEWLINE;
 			//DeleteObject(font);
 			return 0;
 		}
