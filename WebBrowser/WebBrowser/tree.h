@@ -38,10 +38,13 @@ struct FontAttr {
 	bool underscore;
 };
 
+<<<<<<< HEAD
 struct HyperAttr {
 	wstring href;
 };
 
+=======
+>>>>>>> 9451bcab11a9f083cb0cb909ed1361b5985d8226
 struct TagAttr {
 	//여기에 있는것중 하나라도 true라면 newline이 되야한다.
 	bool isPre;
@@ -56,7 +59,10 @@ struct Attribute {
 	InputAttr input;
 	FontAttr font;
 	TagAttr identity;
+<<<<<<< HEAD
 	HyperAttr hyper;
+=======
+>>>>>>> 9451bcab11a9f083cb0cb909ed1361b5985d8226
 };
 
 struct Node {

@@ -24,6 +24,7 @@ using namespace std;
 //#endif
 //#pragma endregion 
 
+
 #define INITX 30
 #define INITY 40
 #define NEWLINE 30
@@ -131,6 +132,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			
 			//스크롤 설정
 			xPos = 0; yPos = 0; xMax = 1000; yMax = 5000;
+
 			SetScrollRange(hWnd, SB_VERT, 0, yMax, TRUE);
 			SetScrollPos(hWnd, SB_VERT, 0, TRUE);
 			SetScrollRange(hWnd, SB_HORZ, 0, xMax, TRUE);
@@ -334,7 +336,6 @@ void traveralExecute(HWND hWnd, HDC hdc, Node root, Socket socket)
 int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, Attribute attrs)
 {
 	enum htmlTag { hr = 0, br = 1, ul = 2, ol = 3, input = 4, table = 5, img = 6, form = 7};
-
 	int cmd;
 	HFONT font, oldfont;
 	Parser parser;
@@ -612,6 +613,7 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 						x += content.length() * 7;
 					else
 						x += content.length() * 18;
+
 					if (contents.size() > 1) y += nextLine;
 				}
 			}
@@ -636,6 +638,7 @@ int executeCmd(HWND hWnd, HDC hdc, Socket socket, wstring tag, wstring content, 
 			if (attrs.identity.isP || attrs.identity.isCenter || attrs.identity.isAddress || attrs.identity.isPre) { y += nextLine; x = INITX; }
 			if (attrs.font.size == 40 || attrs.font.size == 35 || attrs.font.size == 30 || attrs.font.size == 25 || attrs.font.size == 21 || attrs.font.size == 15) { y += nextLine; x = INITX; }
 			if (x > 1000) x = INITX;
+
 			SetTextColor(hdc, RGB(0, 0, 0));
 			//DeleteObject(font);
 			return 0;

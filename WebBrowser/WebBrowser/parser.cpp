@@ -79,6 +79,7 @@ string Parser::getPathFromURL(string url)
 	{
 		path = path.erase(foundE, path.length()-1);
 	}
+
 	return path;
 }
 
@@ -295,7 +296,6 @@ wstring Parser::getHyperRef(wstring content)
 	}
 	return href;
 }
-
 
 Attribute Parser::getAttributes(wstring tag, wstring content)
 {

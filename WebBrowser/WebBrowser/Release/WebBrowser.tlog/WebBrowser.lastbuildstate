@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 #TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=8.1
 Release|Win32|C:\Users\DEUKYEOLCHOE\Desktop\WebBrowser\|
+=======
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit
+Release|Win32|C:\Users\Deukyeol\Desktop\MyGitHub\WebBrowser\|
+>>>>>>> 9451bcab11a9f083cb0cb909ed1361b5985d8226
