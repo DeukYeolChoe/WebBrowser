@@ -1,0 +1,6 @@
+﻿  parser.cpp
+c:\users\deukyeolchoe\desktop\webbrowser\webbrowser\parser.cpp(115): warning C4018: '>': signed/unsigned mismatch
+c:\users\deukyeolchoe\desktop\webbrowser\webbrowser\parser.cpp(120): warning C4018: '>': signed/unsigned mismatch
+c:\users\deukyeolchoe\desktop\webbrowser\webbrowser\parser.cpp(127): warning C4244: '=': conversion from 'wchar_t' to 'char', possible loss of data
+c:\users\deukyeolchoe\desktop\webbrowser\webbrowser\parser.cpp(371): warning C4018: '<': signed/unsigned mismatch
+  WebBrowser.vcxproj -> C:\Users\DEUKYEOLCHOE\Desktop\WebBrowser\Debug\WebBrowser.exe
